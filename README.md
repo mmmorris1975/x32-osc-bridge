@@ -11,8 +11,17 @@ receive updates using the "xremote" OSC extension used by these mixers.
 
 ### Usage
 
-The program is designed to be simple to use, with little to no configuration needed.  A `-v` command option is provided
-to enable verbose output, if needed for troubleshooting, or if you are interested in seeing what the program is doing.
+The program is designed to be simple to use, with little to no configuration needed.
+
+```text
+Usage of ./x32-osc-bridge:
+  -p int client port
+  -v	 enable verbose output
+```
+
+The `-p` option can be used when a connecting device requires a specific port for traffic returned from this program.
+It may be necessary to use this flag with certain OSC-enabled control devices, refer to your product's documentation to
+find the value needed for this option.
 
 #### Proxy
 
@@ -27,9 +36,29 @@ Similar to the proxy, the only thing required is to execute the program.  In you
 the network information needed to communicate with this program.  In your client program, configure the IP address of the
 system you run this program on, and use port 10023.
 
+To enable bi-directional communication with the client, you may need to use the `-p` option to configure the port the
+x32-osc-bridge needs to use to talk back with the client.  If you use TouchOSC or QLC+ (and likely others!), you will
+need to use this option to configure the necessary port so changes on the mixer are communicated back to the client.
+
 In the future it may be possible to specify configuration which allows you to remap an OSC path on the input side to a
 path which is recognized by the mixer.  This could be useful for client tools which output pre-defined OSC messages.
+
+### Examples
+
+Some examples for running the tool with bi-directional communication enabled for various client applications.  The port
+numbers used appears to be default values in the client app, and should hopefully make integration as easy as copy & paste.
+
+#### Touch OSC
+```shell
+x32-osc-bridge -p 9000
+```
+
+#### QLC+
+```shell
+x32-osc-bridge -p 7700
+```
 
 ### Reference
 
 Details about the X32 OSC protocol can be found at https://behringerwiki.musictribe.com/index.php?title=OSC_Remote_Protocol
+Open Sound Control (OSC) documentation http://opensoundcontrol.org/introduction-osc
