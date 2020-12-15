@@ -20,13 +20,16 @@ var (
 	iaddrs  []net.Addr
 	clients sync.Map
 
-	log     = logger.StdLogger
+	log = logger.StdLogger
+
+	port    int
 	verbose bool
 
 	Version string
 )
 
 func init() {
+	flag.IntVar(&port, "p", 0, "client port")
 	flag.BoolVar(&verbose, "v", false, "enable verbose output")
 	log.Infof("%s %s", filepath.Base(os.Args[0]), Version)
 }
@@ -54,6 +57,10 @@ func main() {
 		if err != nil {
 			log.Errorf("ReadFromUDP: %v", err)
 			continue
+		}
+
+		if port > 0 {
+			raddr.Port = port
 		}
 
 		go func(msg []byte, raddr *net.UDPAddr) {
