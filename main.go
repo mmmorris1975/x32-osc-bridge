@@ -28,7 +28,7 @@ var (
 
 func init() {
 	flag.BoolVar(&verbose, "v", false, "enable verbose output")
-	log.Infof("%s version %s", filepath.Base(os.Args[0]), Version)
+	log.Infof("%s %s", filepath.Base(os.Args[0]), Version)
 }
 
 func main() {

@@ -57,7 +57,13 @@ func (c *Client) StartXremote(t time.Duration) {
 			select {
 			case <-ticker.C:
 				if _, err := c.Conn.Write(osc.WriteString("/xremote")); err != nil {
-					Log.Errorf("xremote write: %v", err)
+					if e, ok := err.(*net.OpError); ok {
+						if !e.Temporary() {
+							// conn is likely closed, so we should terminate the loop
+							Log.Errorf("xremote write: %v", err)
+							c.StopXremote()
+						}
+					}
 				}
 			case <-c.ch:
 				Log.Debugln("stopping xremote")

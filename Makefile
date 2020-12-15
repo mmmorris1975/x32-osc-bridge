@@ -29,7 +29,7 @@ linux-amd64:
 	upx -v $(EXE)-$(VER)-$@
 
 linux-arm:
-	GOOS=linux GOARCH=arm GOARM=6 go build -ldflags '-s -w -X main.Version=$(VER)' -o $(EXE)-$(VER)-$@
+	GOOS=linux GOARCH=arm GOARM=7 go build -ldflags '-s -w -X main.Version=$(VER)' -o $(EXE)-$(VER)-$@
 	upx -v $(EXE)-$(VER)-$@
 
 windows-amd64:
