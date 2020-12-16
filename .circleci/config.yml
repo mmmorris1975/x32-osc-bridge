@@ -1,0 +1,41 @@
+# Golang CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-go/ for more details
+version: 2.1
+
+orbs:
+  go: circleci/go@1.5.0
+
+jobs:
+  lint:
+    docker:
+      - image: "golangci/golangci-lint:v1.32.2"
+
+    steps:
+      - checkout
+      - run: golangci-lint run -v
+
+  preflight:
+    executor:
+      name: go/default
+      tag: '1.15'
+
+    steps:
+      - checkout
+
+      - go/load-cache
+      - go/mod-download
+      - go/save-cache
+
+      # specify any bash command here prefixed with `run: `
+      - run: go vet -tests=false ./...
+      - go/test
+
+workflows:
+  version: 2
+
+  # So far we don't have a 'requires' in build for lint, maybe something to change? I mean, who doesn't like clean code?
+  build_and_test:
+    jobs:
+      - lint
+      - preflight
