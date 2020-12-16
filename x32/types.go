@@ -48,7 +48,7 @@ func (c *Client) StartXremote(t time.Duration) {
 		return
 	}
 
-	c.ch = make(chan bool)
+	c.ch = make(chan bool, 1)
 	go func() {
 		ticker := time.NewTicker(t)
 		defer ticker.Stop()
@@ -60,8 +60,9 @@ func (c *Client) StartXremote(t time.Duration) {
 					if e, ok := err.(*net.OpError); ok {
 						if !e.Temporary() {
 							// conn is likely closed, so we should terminate the loop
-							Log.Errorf("xremote write: %v", err)
+							Log.Debugf("xremote write: %v", err)
 							c.StopXremote()
+							return
 						}
 					}
 				}

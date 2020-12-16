@@ -1,13 +1,23 @@
 # X32 OSC Bridge
 
 This program provides a bridge/proxy to the OSC interface of the [Behringer X32](https://www.behringer.com/product.html?modelCode=P0ASF)
-family of digital audio mixer, including the Compact, Producer, and Rack models.
+family of digital audio mixer, including the Compact, Producer, and Rack models.  It may also work for the XAir family
+of digital mixers as well.
 
 As a proxy, it can enable tools like X32-Edit or the excellent [X32 Mixing Station](https://play.google.com/store/apps/details?id=com.davidgiga1993.mixingstation)
 mobile app to access mixers which may reside on another network.
 
 As a bridge, it can allow tools which speak OSC, but don't implement the Behringer extensions, to access the mixer and
 receive updates using the "xremote" OSC extension used by these mixers.
+
+### Installation
+
+Download the compiled program for your operating system and processor architecture from the releases section and run.
+There are no external libraries or language runtime dependencies.
+
+Raspberry Pi uses should download the Linux Arm file for a given version.
+
+**TODO** provide installation packages for the various platforms to simplify installation
 
 ### Usage
 
@@ -48,6 +58,11 @@ path which is recognized by the mixer.  This could be useful for client tools wh
 Some examples for running the tool with bi-directional communication enabled for various client applications.  The port
 numbers used appears to be default values in the client app, and should hopefully make integration as easy as copy & paste.
 
+#### Bridge Mode for X32-Edit, X32 Mixing Station, and possibly X-Air
+```shell
+x32-osc-bridge
+```
+
 #### Touch OSC
 ```shell
 x32-osc-bridge -p 9000
@@ -60,5 +75,5 @@ x32-osc-bridge -p 7700
 
 ### Reference
 
-Details about the X32 OSC protocol can be found at https://behringerwiki.musictribe.com/index.php?title=OSC_Remote_Protocol
+Details about the X32 OSC protocol can be found at https://behringerwiki.musictribe.com/index.php?title=OSC_Remote_Protocol  
 Open Sound Control (OSC) documentation http://opensoundcontrol.org/introduction-osc
