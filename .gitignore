@@ -28,7 +28,6 @@ vendor/
 .DS_Store
 
 # Other stuff we probably don't want leaking out
-.aws/
 .bundle/
 .ca/
 build/
