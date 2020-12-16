@@ -9,27 +9,27 @@ import (
 )
 
 const (
-	// OscPort is the port used by the X32 mixer to receive OSC messages
+	// OscPort is the port used by the X32 mixer to receive OSC messages.
 	OscPort = 10023
 )
 
-// Log is the logger used for this package
+// Log is the logger used for this package.
 var Log = logger.StdLogger
 
-// Mixer is the IP address and port, and other information, found during the discovery process
+// Mixer is the IP address and port, and other information, found during the discovery process.
 type Mixer struct {
 	Addr *net.UDPAddr
 	Info *osc.XInfo
 }
 
-// Client represents a connection through the bridge/proxy to the mixer on the back end
+// Client represents a connection through the bridge/proxy to the mixer on the back end.
 type Client struct {
 	Conn *net.UDPConn
 	ch   chan bool
 	mu   sync.Mutex
 }
 
-// NewClient creates a new connection to the mixer specified in addr
+// NewClient creates a new connection to the mixer specified in addr.
 func NewClient(addr *net.UDPAddr) (*Client, error) {
 	var err error
 	c := new(Client)
@@ -42,7 +42,7 @@ func NewClient(addr *net.UDPAddr) (*Client, error) {
 	return c, nil
 }
 
-// StartXremote sends the /xremote OSC command to the mixer so that it will send messages when mixer parameters change
+// StartXremote sends the /xremote OSC command to the mixer so that it will send messages when mixer parameters change.
 //nolint:gocognit
 func (c *Client) StartXremote(t time.Duration) {
 	_, _ = c.Conn.Write(osc.WriteString("/xremote"))
@@ -81,7 +81,7 @@ func (c *Client) StartXremote(t time.Duration) {
 	}()
 }
 
-// StopXremote shuts down the loop which manages the /xremote data subscription
+// StopXremote shuts down the loop which manages the /xremote data subscription.
 func (c *Client) StopXremote() {
 	c.mu.Lock()
 	defer c.mu.Unlock()

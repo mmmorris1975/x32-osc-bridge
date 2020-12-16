@@ -1,5 +1,6 @@
 # X32 OSC Bridge
 
+[![CircleCI](https://circleci.com/gh/mmmorris1975/x32-osc-bridge.svg?style=svg)](https://app.circleci.com/pipelines/github/mmmorris1975/x32-osc-bridge)
 [![Go Report Card](https://goreportcard.com/badge/github.com/mmmorris1975/x32-osc-bridge)](https://goreportcard.com/report/github.com/mmmorris1975/x32-osc-bridge)
 
 This program provides a bridge/proxy to the OSC interface of the [Behringer X32](https://www.behringer.com/product.html?modelCode=P0ASF)

@@ -6,10 +6,10 @@ import (
 	"io"
 )
 
-// ErrInvalidMessageType is the message returned if the OSC data doesn't match the message type when doing UnmarshalBinary
+// ErrInvalidMessageType is the message returned if the OSC data doesn't match the message type when doing UnmarshalBinary.
 var ErrInvalidMessageType = errors.New("invalid message type")
 
-// WriteString returns a properly padded OSC string for the provided input stream
+// WriteString returns a properly padded OSC string for the provided input stream.
 func WriteString(s string) []byte {
 	msg := append([]byte(s), 0x0)
 
