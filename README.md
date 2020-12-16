@@ -1,5 +1,7 @@
 # X32 OSC Bridge
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/mmmorris1975/x32-osc-bridge)](https://goreportcard.com/report/github.com/mmmorris1975/x32-osc-bridge)
+
 This program provides a bridge/proxy to the OSC interface of the [Behringer X32](https://www.behringer.com/product.html?modelCode=P0ASF)
 family of digital audio mixer, including the Compact, Producer, and Rack models.  It may also work for the XAir family
 of digital mixers as well.
