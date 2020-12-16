@@ -25,6 +25,7 @@ var (
 	port    int
 	verbose bool
 
+	// Version is the program version, managed at build time
 	Version string
 )
 

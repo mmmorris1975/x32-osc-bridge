@@ -6,8 +6,10 @@ import (
 	"io"
 )
 
+// ErrInvalidMessageType is the message returned if the OSC data doesn't match the message type when doing UnmarshalBinary
 var ErrInvalidMessageType = errors.New("invalid message type")
 
+// WriteString returns a properly padded OSC string for the provided input stream
 func WriteString(s string) []byte {
 	msg := append([]byte(s), 0x0)
 
@@ -19,6 +21,9 @@ func WriteString(s string) []byte {
 	return msg
 }
 
+// ReadString reads a string from the provided OSC data, stripping the null padding bytes.  The buffer position will
+// be incremented to just after the padding of this string field so the next read can read the next data type in the
+// message.
 func ReadString(buf *bytes.Buffer) (string, error) {
 	s, err := buf.ReadBytes(0x0)
 	if err != nil && errors.Is(err, io.EOF) {

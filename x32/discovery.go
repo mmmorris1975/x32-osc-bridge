@@ -8,6 +8,9 @@ import (
 	"x32-osc-bridge/osc"
 )
 
+// Discover performs auto-discovery of X32 mixers using OSC messages.  If the addr arg is nil, then broadcast
+// discovery is used.  If addr is not nil, then discovery is attempted only for that address.  At most, 1 mixer
+// will be returned; if no mixers, or more than 1 mixer is found, an error is returned.
 func Discover(addr net.IP) (*Mixer, error) {
 	var err error
 	var wg sync.WaitGroup

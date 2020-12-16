@@ -9,6 +9,8 @@ import (
 
 const xinfoMsg = `/xinfo`
 
+// XInfo is a type representing an X32 OSC message for the /xinfo command.  The fields in the struct match the order
+// of the fields as they appear in the OSC message.  The IP field will be converted to a string.
 type XInfo struct {
 	IP      net.IP
 	Name    string
@@ -16,10 +18,12 @@ type XInfo struct {
 	Version string
 }
 
+// String returns a human-readable form of the data contained in the fields of the object.
 func (t *XInfo) String() string {
 	return fmt.Sprintf("&{IP: %s Name: %s Model: %s Version: %s}", t.IP, t.Name, t.Model, t.Version)
 }
 
+// MarshalBinary converts the data in an instance of this type to a wire-format OSC message.
 func (t *XInfo) MarshalBinary() ([]byte, error) {
 	msg := WriteString(xinfoMsg)
 
@@ -34,6 +38,7 @@ func (t *XInfo) MarshalBinary() ([]byte, error) {
 	return msg, nil
 }
 
+// UnmarshalBinary parses a wire-format OSC message and populates the fields of the object.
 func (t *XInfo) UnmarshalBinary(data []byte) error {
 	path := append(WriteString(xinfoMsg), ',')
 	if !bytes.HasPrefix(data, path) {

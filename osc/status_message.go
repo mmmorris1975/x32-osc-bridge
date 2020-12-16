@@ -8,12 +8,15 @@ import (
 
 const statusMsg = "/status"
 
+// Status is a type representing an X32 OSC message for the /status command.  The fields in the struct match the order
+// of the fields as they appear in the OSC message.  The IP field will be converted to a string.
 type Status struct {
 	State string
 	IP    net.IP
 	Name  string
 }
 
+// MarshalBinary converts the data in an instance of this type to a wire-format OSC message.
 func (t *Status) MarshalBinary() ([]byte, error) {
 	msg := WriteString(statusMsg)
 
@@ -27,6 +30,7 @@ func (t *Status) MarshalBinary() ([]byte, error) {
 	return msg, nil
 }
 
+// UnmarshalBinary parses a wire-format OSC message and populates the fields of the object.
 func (t *Status) UnmarshalBinary(data []byte) error {
 	path := append(WriteString(statusMsg), ',')
 	if !bytes.HasPrefix(data, path) {
