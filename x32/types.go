@@ -37,6 +37,7 @@ func NewClient(addr *net.UDPAddr) (*Client, error) {
 	return c, nil
 }
 
+//nolint:gocognit
 func (c *Client) StartXremote(t time.Duration) {
 	_, _ = c.Conn.Write(osc.WriteString("/xremote"))
 

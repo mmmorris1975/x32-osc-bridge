@@ -25,8 +25,8 @@ func Discover(addr net.IP) (*Mixer, error) {
 	var ch = make(chan *Mixer)
 	var wg2 sync.WaitGroup
 	var mixers []*Mixer
+	wg2.Add(1)
 	go func() {
-		wg2.Add(1)
 		for m := range ch {
 			mixers = append(mixers, m)
 			Log.Debugf("found mixer %v", *m.Info)
@@ -64,6 +64,7 @@ func Discover(addr net.IP) (*Mixer, error) {
 	}
 }
 
+//nolint:gocognit
 func discoverAddrs() ([]net.IP, error) {
 	var err error
 	var discoveryAddrs []net.IP
@@ -123,6 +124,7 @@ func calculateBroadcast(ipNet *net.IPNet) net.IP {
 	return bcast
 }
 
+//nolint:gocognit
 func discover(ip net.IP, retries int) (*Mixer, error) {
 	var err error
 

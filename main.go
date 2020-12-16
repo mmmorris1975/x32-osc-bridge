@@ -63,51 +63,7 @@ func main() {
 			raddr.Port = port
 		}
 
-		go func(msg []byte, raddr *net.UDPAddr) {
-			if bytes.HasPrefix(msg[:16], osc.WriteString("/xinfo")) {
-				xinfoHandler(raddr)
-				return
-			}
-
-			if bytes.HasPrefix(msg[:16], osc.WriteString("/status")) {
-				statusHandler(raddr)
-				return
-			}
-
-			c, ok := clients.Load(raddr.String())
-			if !ok {
-				log.Infof("new client: %v", raddr)
-				var cl *x32.Client
-				cl, err = x32.NewClient(mixer.Addr)
-				if err != nil {
-					log.Errorf("NewClient: %v", err)
-					return
-				}
-
-				c, _ = clients.LoadOrStore(raddr.String(), cl)
-				cl = c.(*x32.Client)
-				cl.StartXremote(3 * time.Second)
-				go readLoop(cl.Conn, raddr)
-			}
-
-			// if the message contains the string subscribe anywhere in the 1st 16 bytes, use it as a flag for an
-			// "active" client, like X32-Edit, which manages it's own synchronization with the mixer state.  For these
-			// cases, we'll stop the xremote process, which is used to keep "passive" clients informed of changes to
-			// the mixer state. This should cover messages for /formatsubscribe, /batchsubscribe, and /unsubscribe.
-			// NOTE - it may take up to 10 seconds for xremote to stop sending back data
-			if bytes.Contains(msg[:16], []byte("subscribe")) {
-				log.Debugf("%s", msg[:16])
-				c.(*x32.Client).StopXremote()
-			}
-
-			if _, err = c.(*x32.Client).Conn.Write(msg); err != nil {
-				log.Errorf("mixer write: %v", err)
-			}
-
-			if bytes.HasPrefix(msg, osc.WriteString("/unsubscribe")) {
-				unsubscribeHandler(raddr)
-			}
-		}(buf[:n], raddr)
+		go handleMsg(buf[:n], raddr)
 	}
 }
 
@@ -153,6 +109,54 @@ func readLoop(conn *net.UDPConn, addr *net.UDPAddr) {
 			log.Errorf("readLoop:WriteToUDP() - %v", err)
 			return
 		}
+	}
+}
+
+func handleMsg(msg []byte, raddr *net.UDPAddr) {
+	var err error
+
+	if bytes.HasPrefix(msg[:16], osc.WriteString("/xinfo")) {
+		xinfoHandler(raddr)
+		return
+	}
+
+	if bytes.HasPrefix(msg[:16], osc.WriteString("/status")) {
+		statusHandler(raddr)
+		return
+	}
+
+	c, ok := clients.Load(raddr.String())
+	if !ok {
+		log.Infof("new client: %v", raddr)
+		var cl *x32.Client
+		cl, err = x32.NewClient(mixer.Addr)
+		if err != nil {
+			log.Errorf("NewClient: %v", err)
+			return
+		}
+
+		c, _ = clients.LoadOrStore(raddr.String(), cl)
+		cl = c.(*x32.Client)
+		cl.StartXremote(3 * time.Second)
+		go readLoop(cl.Conn, raddr)
+	}
+
+	// if the message contains the string subscribe anywhere in the 1st 16 bytes, use it as a flag for an
+	// "active" client, like X32-Edit, which manages it's own synchronization with the mixer state.  For these
+	// cases, we'll stop the xremote process, which is used to keep "passive" clients informed of changes to
+	// the mixer state. This should cover messages for /formatsubscribe, /batchsubscribe, and /unsubscribe.
+	// NOTE - it may take up to 10 seconds for xremote to stop sending back data
+	if bytes.Contains(msg[:16], []byte("subscribe")) {
+		log.Debugf("%s", msg[:16])
+		c.(*x32.Client).StopXremote()
+	}
+
+	if _, err = c.(*x32.Client).Conn.Write(msg); err != nil {
+		log.Errorf("mixer write: %v", err)
+	}
+
+	if bytes.HasPrefix(msg, osc.WriteString("/unsubscribe")) {
+		unsubscribeHandler(raddr)
 	}
 }
 
