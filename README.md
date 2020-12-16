@@ -75,5 +75,5 @@ x32-osc-bridge -p 7700
 
 ### Reference
 
-Details about the X32 OSC protocol can be found at https://behringerwiki.musictribe.com/index.php?title=OSC_Remote_Protocol  
+X32 OSC protocol documentation https://behringerwiki.musictribe.com/index.php?title=OSC_Remote_Protocol  
 Open Sound Control (OSC) documentation http://opensoundcontrol.org/introduction-osc
