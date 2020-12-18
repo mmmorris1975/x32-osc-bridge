@@ -92,7 +92,9 @@ jobs:
       - image: busybox:latest
 
     steps:
-      - run: "true"
+      - attach_workspace:
+          at: /var/tmp/release
+      - run: ls -l /var/tmp/release
 
 workflows:
   version: 2
