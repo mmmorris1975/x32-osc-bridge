@@ -1,4 +1,7 @@
-#!/usr/bin/env bash -eo pipefail
+#!/usr/bin/env bash
+
+set -e
+set -o pipefail
 
 source scripts/helpers.sh
 

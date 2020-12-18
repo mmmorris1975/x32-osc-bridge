@@ -50,6 +50,7 @@ jobs:
 
     # TODO - fpm up in RPM, DEB, and tar.gz (zip?)
     steps:
+      - run: mkdir /build
       - attach_workspace:
           at: /build
       - run: cat /build/version
@@ -74,6 +75,7 @@ jobs:
 
     # TODO - package as zip (and pkg for MacOS build ... via pkgbuld)
     steps:
+      - run: mkdir /build
       - attach_workspace:
           at: /build
       - run: cat /build/version
