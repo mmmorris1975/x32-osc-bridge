@@ -84,7 +84,7 @@ jobs:
     steps:
       - checkout
       - run: apk update
-      - run: apk add zip upx bash
+      - run: apk add zip upx bash git
       - attach_workspace:
           at: /var/tmp/package
       - run: mkdir -p /var/tmp/package/artifacts
