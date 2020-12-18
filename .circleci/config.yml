@@ -50,11 +50,11 @@ jobs:
 
     # TODO - fpm up in RPM, DEB, and tar.gz (zip?)
     steps:
-      - run: mkdir /build
+      - run: mkdir /var/tmp/build
       - attach_workspace:
-          at: /build
-      - run: cat /build/version
-      - run: file /build/*/x32*
+          at: /var/tmp/build
+      - run: cat /var/tmp/build/version
+      - run: file /var/tmp/build/*/x32*
 
   build_mac_win:
     docker:
@@ -75,11 +75,11 @@ jobs:
 
     # TODO - package as zip (and pkg for MacOS build ... via pkgbuld)
     steps:
-      - run: mkdir /build
+      - run: mkdir /var/tmp/build
       - attach_workspace:
-          at: /build
-      - run: cat /build/version
-      - run: file /build/*/x32*
+          at: /var/tmp/build
+      - run: cat /var/tmp/build/version
+      - run: file /var/tmp/build/*/x32*
       - run: which pkgbuild
 
   # TODO - all of the release stuff ... should this require and approval step?
