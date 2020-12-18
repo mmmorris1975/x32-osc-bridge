@@ -86,7 +86,7 @@ jobs:
       - image: busybox:latest
 
     steps:
-      - run: true
+      - run: "true"
 
 workflows:
   version: 2
