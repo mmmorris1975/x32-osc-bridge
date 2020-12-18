@@ -38,7 +38,9 @@ jobs:
     steps:
       - checkout
       - run: mkdir -p /var/tmp/build
-      - run: scripts/build_linux.sh /var/tmp/build
+      - run:
+          command: scripts/build_linux.sh
+          working_directory: /var/tmp/build
       - persist_to_workspace:
           root: /var/tmp/build
           paths:
@@ -56,7 +58,9 @@ jobs:
       - attach_workspace:
           at: /var/tmp/package
       - run: mkdir -p /var/tmp/package/artifacts
-      - run: scripts/package_linux.sh /var/tmp/package
+      - run:
+          command: scripts/package_linux.sh
+          working_directory: /var/tmp/package
       - persist_to_workspace:
          root: /var/tmp/package
          paths:
@@ -69,7 +73,9 @@ jobs:
     steps:
       - checkout
       - run: mkdir -p /var/tmp/build
-      - run: scripts/build_mac_win.sh /var/tmp/build
+      - run:
+          command: scripts/build_mac_win.sh
+          working_directory: /var/tmp/build
       - persist_to_workspace:
           root: /var/tmp/build
           paths:
@@ -88,7 +94,9 @@ jobs:
       - attach_workspace:
           at: /var/tmp/package
       - run: mkdir -p /var/tmp/package/artifacts
-      - run: scripts/package_mac_win.sh /var/tmp/package
+      - run:
+          command: scripts/package_mac_win.sh
+          working_directory: /var/tmp/package
       - persist_to_workspace:
          root: /var/tmp/package
          paths:
@@ -104,13 +112,8 @@ jobs:
       - attach_workspace:
           at: /var/tmp/release
       - run:
+          command: scripts/release.sh
           working_directory: /var/tmp/release/artifacts
-          command: sha256sum * >MANIFEST
-      - when:
-          condition: << pipeline.git.tag >>
-          steps:
-            - run: cat /var/tmp/release/artifacts/MANIFEST
-            - run: echo "TAG - << pipeline.git.tag >>"
 
 workflows:
   version: 2
@@ -136,3 +139,6 @@ workflows:
           requires:
             - package_linux
             - package_mac_win
+          filters:
+            branches:
+              only: master
