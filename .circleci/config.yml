@@ -103,7 +103,7 @@ jobs:
     steps:
       - attach_workspace:
           at: /var/tmp/release
-      - run: ls -l /var/tmp/release
+      - run: ls -l /var/tmp/release/artifacts
 
 workflows:
   version: 2
