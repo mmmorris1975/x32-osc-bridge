@@ -98,10 +98,12 @@ jobs:
   #  REF: https://circleci.com/docs/2.0/configuration-reference/#type
   release:
     docker:
-      - image: busybox:latest
+      - image: alpine:3
 
     steps:
       - checkout
+      - run: apk update
+      - run: apk add bash git
       - attach_workspace:
           at: /var/tmp/release
       - run: scripts/release.sh /var/tmp/release/artifacts
