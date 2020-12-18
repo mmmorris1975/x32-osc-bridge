@@ -49,6 +49,7 @@ jobs:
       - image: 'cimg/ruby:2.7'
 
     steps:
+      - checkout
       - run: apt-get update
       - run: apt-get install upx
       - run: gem install fpm
@@ -77,6 +78,7 @@ jobs:
       - image: alpine:3
 
     steps:
+      - checkout
       - run: apk update
       - run: apk add zip upx
       - attach_workspace:
