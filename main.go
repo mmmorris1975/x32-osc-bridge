@@ -91,6 +91,8 @@ func initialize() (err error) {
 }
 
 func readLoop(conn *net.UDPConn, addr *net.UDPAddr) {
+	defer unsubscribeHandler(addr)
+
 	buf := make([]byte, 65535)
 
 	for {
