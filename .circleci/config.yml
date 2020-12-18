@@ -57,9 +57,9 @@ jobs:
       - attach_workspace:
           at: /var/tmp/package
       - run: scripts/package_linux.sh /var/tmp/package
-      - run: mkdir /var/tmp/artifacts
+#      - run: mkdir /var/tmp/artifacts
       - persist_to_workspace:
-         root: /var/tmp/artifacts
+         root: /var/tmp/package
          paths:
            - /var/tmp/package/*.zip
            - /var/tmp/package/*.rpm
@@ -92,9 +92,9 @@ jobs:
       - attach_workspace:
           at: /var/tmp/package
       - run: scripts/package_mac_win.sh /var/tmp/package
-      - run: mkdir /var/tmp/artifacts
+#      - run: mkdir /var/tmp/artifacts
       - persist_to_workspace:
-          root: /var/tmp/artifacts
+          root: /var/tmp/package
           paths:
             - /var/tmp/package/*.zip
   # TODO - all of the release stuff ... should this require and approval step?
