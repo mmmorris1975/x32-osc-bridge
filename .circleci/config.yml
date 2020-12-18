@@ -55,9 +55,8 @@ jobs:
       - run: gem install fpm
       - attach_workspace:
           at: /var/tmp/package
-      - run: scripts/package_linux.sh /var/tmp/package
       - run: mkdir -p /var/tmp/package/artifacts
-      - run: cp *.zip *.rpm *.deb /var/tmp/package/artifacts
+      - run: scripts/package_linux.sh /var/tmp/package
       - persist_to_workspace:
          root: /var/tmp/package
          paths:
@@ -88,9 +87,8 @@ jobs:
       - run: apk add zip upx bash
       - attach_workspace:
           at: /var/tmp/package
-      - run: scripts/package_mac_win.sh /var/tmp/package
       - run: mkdir -p /var/tmp/package/artifacts
-      - run: cp *.zip /var/tmp/package/artifacts
+      - run: scripts/package_mac_win.sh /var/tmp/package
       - persist_to_workspace:
          root: /var/tmp/package
          paths:
