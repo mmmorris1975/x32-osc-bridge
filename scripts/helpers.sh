@@ -34,7 +34,7 @@ function pkg_rpm() {
   cd $1
   fpm --verbose -s dir -t rpm --name $NAME --version $(cat ../version) --license MIT --architecture $RPM_ARCH \
     --provides $NAME --description $NAME --url "https://github.com/mmmorris1975/$NAME" --maintainer 'mmmorris1975@github' \
-    --rpm-user bin --rpm-group bin --rpm-digest sha1 --prefix /usr/local/bin
+    --rpm-user bin --rpm-group bin --rpm-digest sha1 --prefix /usr/local/bin *
   cd ..
 }
 
@@ -51,6 +51,6 @@ function pkg_deb() {
   cd $1
   fpm --verbose -s dir -t deb --name $NAME --version $(cat ../version) --license MIT --architecture $DEB_ARCH \
     --provides $NAME --description $NAME --url "https://github.com/mmmorris1975/$NAME" --maintainer 'mmmorris1975@github' \
-    --deb-user bin --deb-group bin --prefix /usr/local/bin
+    --deb-user bin --deb-group bin --prefix /usr/local/bin *
   cd ..
 }
