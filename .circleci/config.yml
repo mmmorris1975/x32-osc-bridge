@@ -94,7 +94,7 @@ jobs:
          paths:
            - artifacts/
 
-  # TODO - all of the release stuff ... should this require and approval step?
+  # TODO - all of the release stuff ... should this require an approval step?
   #  REF: https://circleci.com/docs/2.0/configuration-reference/#type
   release:
     docker:
@@ -103,7 +103,10 @@ jobs:
     steps:
       - attach_workspace:
           at: /var/tmp/release
-      - run: ls -l /var/tmp/release/artifacts
+      - run:
+          working_directory: /var/tmp/release/artifacts
+          command: sha256sum * >MANIFEST
+      - run: cat /var/tmp/release/artifacts/MANIFEST
 
 workflows:
   version: 2
