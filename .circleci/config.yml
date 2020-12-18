@@ -107,6 +107,7 @@ jobs:
           working_directory: /var/tmp/release/artifacts
           command: sha256sum * >MANIFEST
       - run: cat /var/tmp/release/artifacts/MANIFEST
+      - run: echo "TAG << pipeline.git.tag >>"
 
 workflows:
   version: 2
