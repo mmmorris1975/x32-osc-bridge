@@ -109,6 +109,8 @@ jobs:
       - run: cat /var/tmp/release/artifacts/MANIFEST
       - run: echo "TAG << pipeline.git.tag >>"
 
+    when: << pipeline.git.tag >>
+
 workflows:
   version: 2
 
@@ -130,7 +132,6 @@ workflows:
           requires:
             - build_mac_win
       - release:
-          when: << pipeline.git.tag >>
           requires:
             - package_linux
             - package_mac_win
