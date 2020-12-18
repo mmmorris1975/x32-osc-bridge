@@ -110,7 +110,7 @@ jobs:
           condition: << pipeline.git.tag >>
           steps:
             - run: cat /var/tmp/release/artifacts/MANIFEST
-            - run: echo "TAG << pipeline.git.tag >>"
+            - run: echo "TAG - << pipeline.git.tag >>"
 
 workflows:
   version: 2
