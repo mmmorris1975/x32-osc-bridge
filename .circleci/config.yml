@@ -51,7 +51,7 @@ jobs:
     steps:
       - checkout
       - run: sudo apt-get update
-      - run: sudo apt-get install -y upx
+      - run: sudo apt-get install -y upx alien
       - run: gem install fpm
       - run: mkdir /var/tmp/build
       - attach_workspace:
