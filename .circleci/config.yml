@@ -48,13 +48,14 @@ jobs:
     docker:
       - image: 'cimg/ruby:2.7'
 
-    # TODO - fpm up in RPM, DEB, and tar.gz (zip?)
     steps:
+      - run: apt-get update
+      - run: apt-get install upx
+      - run: gem install fpm
       - run: mkdir /var/tmp/build
       - attach_workspace:
           at: /var/tmp/build
-      - run: cat /var/tmp/build/version
-      - run: file /var/tmp/build/*/x32*
+      - run: scripts/package_linux.sh /var/tmp/build
 
   build_mac_win:
     docker:
@@ -69,20 +70,21 @@ jobs:
           paths:
             - .
 
+  # If we ever want to release MacOS packages, we'll need to run it on a macos executor.
+  # For now, use docker and just release zips
   package_mac_win:
-    macos:
-      xcode: 12.2.0
+    docker:
+      - image: alpine:3
 
-    # TODO - package as zip (and pkg for MacOS build ... via pkgbuld)
     steps:
-      - run: mkdir /var/tmp/build
+      - run: apk update
+      - run: apk add zip upx
       - attach_workspace:
           at: /var/tmp/build
-      - run: cat /var/tmp/build/version
-      - run: file /var/tmp/build/*/x32*
-      - run: which pkgbuild
+      - run: scripts/package_mac_win.sh /var/tmp/build
 
   # TODO - all of the release stuff ... should this require and approval step?
+  #  REF: https://circleci.com/docs/2.0/configuration-reference/#type
   release:
     docker:
       - image: busybox:latest

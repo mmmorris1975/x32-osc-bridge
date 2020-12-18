@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
-set -o pipefail
-
 source scripts/helpers.sh
 
 export GOARCH="amd64"
