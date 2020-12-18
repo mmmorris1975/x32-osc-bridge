@@ -61,9 +61,9 @@ jobs:
       - persist_to_workspace:
          root: /var/tmp/package
          paths:
-           - /var/tmp/package/*.zip
-           - /var/tmp/package/*.rpm
-           - /var/tmp/package/*.deb
+           - ./*.zip
+           - ./*.rpm
+           - ./*.deb
 
   build_mac_win:
     docker:
@@ -96,7 +96,7 @@ jobs:
       - persist_to_workspace:
           root: /var/tmp/package
           paths:
-            - /var/tmp/package/*.zip
+            - ./*.zip
   # TODO - all of the release stuff ... should this require and approval step?
   #  REF: https://circleci.com/docs/2.0/configuration-reference/#type
   release:
