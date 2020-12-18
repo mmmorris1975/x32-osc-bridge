@@ -53,17 +53,15 @@ jobs:
       - run: sudo apt-get update
       - run: sudo apt-get install -y upx alien
       - run: gem install fpm
-#      - run: mkdir /var/tmp/package
       - attach_workspace:
           at: /var/tmp/package
       - run: scripts/package_linux.sh /var/tmp/package
-#      - run: mkdir /var/tmp/artifacts
+      - run: mkdir -p /var/tmp/package/artifacts
+      - run: mv *.zip *.rpm *.deb /var/tmp/packages/artifacts
       - persist_to_workspace:
          root: /var/tmp/package
          paths:
-           - ./*.zip
-           - ./*.rpm
-           - ./*.deb
+           - artifacts/
 
   build_mac_win:
     docker:
@@ -88,15 +86,16 @@ jobs:
       - checkout
       - run: apk update
       - run: apk add zip upx bash
-#      - run: mkdir /var/tmp/package
       - attach_workspace:
           at: /var/tmp/package
       - run: scripts/package_mac_win.sh /var/tmp/package
-#      - run: mkdir /var/tmp/artifacts
+      - run: mkdir -p /var/tmp/package/artifacts
+      - run: mv *.zip *.rpm *.deb /var/tmp/packages/artifacts
       - persist_to_workspace:
-          root: /var/tmp/package
-          paths:
-            - ./*.zip
+         root: /var/tmp/package
+         paths:
+           - artifacts/
+
   # TODO - all of the release stuff ... should this require and approval step?
   #  REF: https://circleci.com/docs/2.0/configuration-reference/#type
   release:
