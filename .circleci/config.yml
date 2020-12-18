@@ -31,6 +31,63 @@ jobs:
       - run: go vet -tests=false ./...
       - go/test
 
+  build_linux:
+    docker:
+      - image: 'cimg/go:1.15'
+
+    steps:
+      - checkout
+      - run: mkdir -p /var/tmp/build
+      - run: scripts/build_linux.sh /var/tmp/build
+      - persist_to_workspace:
+          root: /var/tmp/build
+          paths:
+            - .
+
+  package_linux:
+    docker:
+      - image: 'cimg/ruby:2.7'
+
+    # TODO - fpm up in RPM, DEB, and tar.gz (zip?)
+    steps:
+      - attach_workspace:
+          at: /build
+      - run: cat /build/version
+      - run: file /build/*/x32*
+
+  build_mac_win:
+    docker:
+      - image: 'cimg/go:1.15'
+
+    steps:
+      - checkout
+      - run: mkdir -p /var/tmp/build
+      - run: scripts/build_mac_win.sh /var/tmp/build
+      - persist_to_workspace:
+          root: /var/tmp/build
+          paths:
+            - .
+
+  package_mac_win:
+    macos:
+      xcode: 12.2.0
+
+    # TODO - package as zip (and pkg for MacOS build ... via pkgbuld)
+    steps:
+      - attach_workspace:
+          at: /build
+      - run: cat /build/version
+      - run: file /build/*/x32*
+      - run: which pkgbuild
+
+  # TODO - all of the release stuff ... should this require and approval step?
+  release:
+    docker:
+      - image: busybox:latest
+
+    steps:
+      - run: true
+
 workflows:
   version: 2
 
@@ -39,3 +96,19 @@ workflows:
     jobs:
       - lint
       - preflight
+      - build_linux:
+          requires:
+            - preflight
+      - package_linux:
+          requires:
+            - build_linux
+      - build_mac_win:
+          requires:
+            - preflight
+      - package_mac_win:
+          requires:
+            - build_mac_win
+      - release:
+          requires:
+            - package_linux
+            - package_mac_win
