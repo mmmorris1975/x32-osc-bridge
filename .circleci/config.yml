@@ -57,7 +57,7 @@ jobs:
           at: /var/tmp/package
       - run: scripts/package_linux.sh /var/tmp/package
       - run: mkdir -p /var/tmp/package/artifacts
-      - run: mv *.zip *.rpm *.deb /var/tmp/packages/artifacts
+      - run: mv *.zip *.rpm *.deb /var/tmp/package/artifacts
       - persist_to_workspace:
          root: /var/tmp/package
          paths:
@@ -90,7 +90,7 @@ jobs:
           at: /var/tmp/package
       - run: scripts/package_mac_win.sh /var/tmp/package
       - run: mkdir -p /var/tmp/package/artifacts
-      - run: mv *.zip *.rpm *.deb /var/tmp/packages/artifacts
+      - run: mv *.zip *.rpm *.deb /var/tmp/package/artifacts
       - persist_to_workspace:
          root: /var/tmp/package
          paths:
