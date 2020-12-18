@@ -50,8 +50,8 @@ jobs:
 
     steps:
       - checkout
-      - run: apt-get update
-      - run: apt-get install upx
+      - run: sudo apt-get update
+      - run: sudo apt-get install -y upx
       - run: gem install fpm
       - run: mkdir /var/tmp/build
       - attach_workspace:
@@ -80,7 +80,7 @@ jobs:
     steps:
       - checkout
       - run: apk update
-      - run: apk add zip upx
+      - run: apk add zip upx bash
       - attach_workspace:
           at: /var/tmp/build
       - run: scripts/package_mac_win.sh /var/tmp/build
