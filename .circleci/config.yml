@@ -130,6 +130,7 @@ workflows:
           requires:
             - build_mac_win
       - release:
+          when: << pipeline.git.tag >>
           requires:
             - package_linux
             - package_mac_win
