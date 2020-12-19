@@ -122,6 +122,7 @@ jobs:
 workflows:
   version: 2
 
+  # See https://circleci.com/docs/2.0/workflows/#executing-workflows-for-a-git-tag for explanation why we need filters
   # So far we don't have a 'requires' in build for lint, maybe something to change? I mean, who doesn't like clean code?
   build_and_test:
     jobs:
