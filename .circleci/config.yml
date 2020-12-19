@@ -31,12 +31,25 @@ jobs:
       - run: go vet -tests=false ./...
       - go/test
 
-  build_linux:
-    docker:
-      - image: 'cimg/go:1.15'
+  build_omni:
+    executor:
+      name: go/default
+      tag: '1.15'
 
     steps:
       - checkout
+      - go/load-cache
+      - run: scripts/build_linux.sh /tmp
+      - run: scripts/build_mac_win.sh /tmp
+
+  build_linux:
+    executor:
+      name: go/default
+      tag: '1.15'
+
+    steps:
+      - checkout
+      - go/load-cache
       - run: mkdir -p /var/tmp/build
       - run: scripts/build_linux.sh /var/tmp/build
       - persist_to_workspace:
@@ -63,11 +76,13 @@ jobs:
            - artifacts/
 
   build_mac_win:
-    docker:
-      - image: 'cimg/go:1.15'
+    executor:
+      name: go/default
+      tag: '1.15'
 
     steps:
       - checkout
+      - go/load-cache
       - run: mkdir -p /var/tmp/build
       - run: scripts/build_mac_win.sh /var/tmp/build
       - persist_to_workspace:
@@ -111,25 +126,29 @@ workflows:
 
   # So far we don't have a 'requires' in build for lint, maybe something to change? I mean, who doesn't like clean code?
   build_and_test:
+    unless: << pipeline.git.tag >>
     jobs:
       - lint
       - preflight
-      - build_linux:
+      - build_omni:
           requires:
             - preflight
-      - package_linux:
-          requires:
-            - build_linux
-      - build_mac_win:
-          requires:
-            - preflight
-      - package_mac_win:
-          requires:
-            - build_mac_win
-      - release:
-          requires:
-            - package_linux
-            - package_mac_win
-          filters:
-            branches:
-              only: master
+#      - build_linux:
+#          requires:
+#            - preflight
+#      - package_linux:
+#          requires:
+#            - build_linux
+#      - build_mac_win:
+#          requires:
+#            - preflight
+#      - package_mac_win:
+#          requires:
+#            - build_mac_win
+#      - release:
+#          requires:
+#            - package_linux
+#            - package_mac_win
+#          filters:
+#            branches:
+#              only: master
