@@ -133,22 +133,27 @@ workflows:
       - build_omni:
           requires:
             - preflight
-#      - build_linux:
-#          requires:
-#            - preflight
-#      - package_linux:
-#          requires:
-#            - build_linux
-#      - build_mac_win:
-#          requires:
-#            - preflight
-#      - package_mac_win:
-#          requires:
-#            - build_mac_win
-#      - release:
-#          requires:
-#            - package_linux
-#            - package_mac_win
-#          filters:
-#            branches:
-#              only: master
+
+  release:
+    when:
+      and:
+        - << pipeline.git.tag >>
+        - equal: [ master, << pipeline.git.branch >> ]
+    jobs:
+      - preflight
+      - build_linux:
+          requires:
+            - preflight
+      - package_linux:
+          requires:
+            - build_linux
+      - build_mac_win:
+          requires:
+            - preflight
+      - package_mac_win:
+          requires:
+            - build_mac_win
+      - release:
+          requires:
+            - package_linux
+            - package_mac_win
