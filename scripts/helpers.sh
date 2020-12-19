@@ -3,6 +3,7 @@ set -o pipefail
 
 NAME="x32-osc-bridge"
 VER=$(git describe --tags)
+PKG_VER=$(sed -e 's/^[[:alpha:]]//' <<< $VER)
 
 function build() {
   BUILDDIR=${1:-"."}/${GOOS}-${GOARCH}
@@ -30,7 +31,7 @@ function pkg_rpm() {
   fi
 
   cd $1
-  fpm --verbose -s dir -t rpm --name $NAME --version $VER --license MIT --architecture $RPM_ARCH \
+  fpm --verbose -s dir -t rpm --name $NAME --version $PKG_VER --license MIT --architecture $RPM_ARCH \
     --provides $NAME --description $NAME --url "https://github.com/mmmorris1975/$NAME" --maintainer 'mmmorris1975@github' \
     --rpm-user bin --rpm-group bin --rpm-digest sha1 --prefix /usr/local/bin *
   mv *.rpm ../artifacts/
@@ -48,7 +49,7 @@ function pkg_deb() {
   fi
 
   cd $1
-  fpm --verbose -s dir -t deb --name $NAME --version $VER --license MIT --architecture $DEB_ARCH \
+  fpm --verbose -s dir -t deb --name $NAME --version $PKG_VER --license MIT --architecture $DEB_ARCH \
     --provides $NAME --description $NAME --url "https://github.com/mmmorris1975/$NAME" --maintainer 'mmmorris1975@github' \
     --deb-user bin --deb-group bin --prefix /usr/local/bin *
   mv *.deb ../artifacts/
