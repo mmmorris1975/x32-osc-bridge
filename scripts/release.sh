@@ -10,9 +10,7 @@ GH=$(find /var/tmp/gh* -name gh)
 
 cd ${1:-.}
 
-sha256sum * >MANIFEST
-
-# TODO - actually release something
-cat MANIFEST
+sha256sum * >${NAME}_${VER}.sha256sum
+cat *sha256sum
 
 $GH release create $VER *.deb *.rpm *.zip *sha256sum -R mmmorris1975/$NAME -n "release $VER"
