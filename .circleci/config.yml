@@ -124,34 +124,51 @@ workflows:
 
   # So far we don't have a 'requires' in build for lint, maybe something to change? I mean, who doesn't like clean code?
   build_and_test:
-    unless: << pipeline.git.tag >>
     jobs:
-      - lint
-      - preflight
+      - lint:
+          filters: &ci-filter
+            tags:
+              ignore: /.*/
+      - preflight:
+          filters:
+            <<: *ci-filter
       - build_omni:
+          filters:
+            <<: *ci-filter
           requires:
             - preflight
 
   release:
-    when:
-      and:
-        - << pipeline.git.tag >>
-        - equal: [ master, << pipeline.git.branch >> ]
     jobs:
-      - preflight
+      - preflight:
+          filters: &release-filter
+            branches:
+              only: master
+            tags:
+              only: /^v\d+\.\d+\.\d+/
       - build_linux:
+          filters:
+            <<: *release-filter
           requires:
             - preflight
       - package_linux:
+          filters:
+            <<: *release-filter
           requires:
             - build_linux
       - build_mac_win:
+          filters:
+            <<: *release-filter
           requires:
             - preflight
       - package_mac_win:
+          filters:
+            <<: *release-filter
           requires:
             - build_mac_win
       - release:
+          filters:
+            <<: *release-filter
           requires:
             - package_linux
             - package_mac_win
