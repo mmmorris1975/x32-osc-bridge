@@ -15,4 +15,4 @@ sha256sum * >MANIFEST
 # TODO - actually release something
 cat MANIFEST
 
-gh release create $VER *.deb *.rpm *.zip -R mmmorris1975/$NAME
+$GH release create $VER *.deb *.rpm *.zip -R mmmorris1975/$NAME
