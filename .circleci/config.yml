@@ -7,7 +7,7 @@ orbs:
 jobs:
   lint:
     docker:
-      - image: "golangci/golangci-lint:v1.32.2"
+      - image: "golangci/golangci-lint:v1.36"
 
     steps:
       - checkout
@@ -20,12 +20,9 @@ jobs:
 
     steps:
       - checkout
-
       - go/load-cache
       - go/mod-download
       - go/save-cache
-
-      # specify any bash command here prefixed with `run: `
       - run: go vet -tests=false ./...
       - go/test
 
@@ -96,8 +93,7 @@ jobs:
 
     steps:
       - checkout
-      - run: apk update
-      - run: apk add zip upx bash git
+      - run: apk add --no-cache zip upx bash git
       - attach_workspace:
           at: /var/tmp/package
       - run: mkdir -p /var/tmp/package/artifacts
@@ -113,8 +109,7 @@ jobs:
 
     steps:
       - checkout
-      - run: apk update
-      - run: apk add bash git
+      - run: apk add --no-cache bash git
       - attach_workspace:
           at: /var/tmp/release
       - run: scripts/release.sh /var/tmp/release/artifacts
